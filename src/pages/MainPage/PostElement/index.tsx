@@ -13,7 +13,7 @@ const PostElement = ({post}: {post: Post}) => {
 	const navigate = useNavigate()
 
 	const handleClick = useCallback(() => {
-		navigate(`/post/${post.id}`)
+		navigate(`/post/${post.id}?userId=${post.userId}`)
 	}, [post.id])
 
 	return (

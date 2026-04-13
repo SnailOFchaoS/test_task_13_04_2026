@@ -8,8 +8,9 @@
 	flex-direction: column;
 	display: flex;
 	@include scale(padding-top, 126px);
-	@include scale(padding-left, 40px);
 	@include scale(padding-right, 40px);
+	@include scale(padding-bottom, 80px);
+	@include scale(padding-left, 40px);
 
 	.postsList {
 		box-sizing: border-box;
