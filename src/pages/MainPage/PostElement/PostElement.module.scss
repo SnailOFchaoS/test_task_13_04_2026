@@ -1,0 +1,23 @@
+@use '../../../common/styles.scss' as *;
+
+.container {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	// align-items: center;
+	cursor: pointer;
+	border-bottom: 1px solid #000;
+	width: 100%;
+	@include scale(height, 80px);
+
+	&:hover {
+		background-color: #f0f0f0;
+	}
+
+	.title {
+		@include scale(font-size, 24px);
+		@include scale(padding-left, 60px);
+		font-weight: 500;
+		color: #000;
+	}
+}

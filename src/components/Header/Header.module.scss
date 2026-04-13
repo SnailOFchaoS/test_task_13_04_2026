@@ -1,0 +1,31 @@
+@use '../../common/styles.scss' as *;
+
+.container {
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 10;
+	width: 100%;
+	background-color: transparent;
+	@include scale(height, 80px);
+	@include scale(padding-left, 20px);
+
+	.turnBackButton {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		color: red;
+		cursor: pointer;
+		background-color: transparent;
+		border: none;
+		font-size: 40px;
+		font-weight: 600;
+		font-family: 'Montserrat', sans-serif;
+	}
+}

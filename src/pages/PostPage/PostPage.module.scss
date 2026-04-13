@@ -1,0 +1,37 @@
+@use '../../common/styles.scss' as *;
+
+.container {
+	box-sizing: border-box;
+  min-height: 100vh;
+	width: 100%;
+	background-color: #fffff0;
+	flex-direction: column;
+	display: flex;
+	@include scale(padding-top, 126px);
+	@include scale(padding-left, 40px);
+	@include scale(padding-right, 40px);
+	@include scale(gap, 20px);
+
+	.postLine{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+		width: 100%;
+		@include scale(min-height, 80px);
+
+		.title{
+			@include scale(font-size, 24px);
+			font-weight: 600;
+			color: #000;
+			font-family: 'Montserrat', sans-serif;
+		}
+
+		.text{
+			@include scale(font-size, 24px);
+			font-weight: 500;
+			color: #000;
+			font-family: 'Montserrat', sans-serif;
+		}
+	}
+
+}

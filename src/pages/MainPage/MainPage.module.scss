@@ -1,0 +1,65 @@
+@use '../../common/styles.scss' as *;
+
+.container {
+	box-sizing: border-box;
+  min-height: 100vh;
+	width: 100%;
+	background-color: #fffff0;
+	flex-direction: column;
+	display: flex;
+	@include scale(padding-top, 126px);
+	@include scale(padding-left, 40px);
+	@include scale(padding-right, 40px);
+
+	.postsList {
+		box-sizing: border-box;
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		width: 100%;
+	}
+
+	.pagination {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		cursor: pointer;
+		width: 100%;
+		@include scale(height, 80px);
+		@include scale(padding-top, 20px);
+
+		.paginationText {
+			font-family: 'Montserrat', sans-serif;
+			font-size: 16px;
+			font-weight: 500;
+			color: #000;
+		}
+
+		.paginationButtons {
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			@include scale(gap, 10px);
+
+			.button {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				@include scale(width, 32px);
+				@include scale(height, 32px);
+				border: 1px solid #000;
+				cursor: pointer;
+				background-color: transparent;
+				border-radius: 50%;
+				color: #000;
+				font-size: 24px;
+				font-weight: 500;
+				font-family: 'Montserrat', sans-serif;
+				&:hover {
+					background-color: #f0f0f0;
+				}
+			}
+		}
+	}
+}
