@@ -27,3 +27,10 @@ export interface User {
 	website: string
 	company: UserCompany
 }
+
+export interface UsersState {
+	users: User[]
+	currentUser: User | null
+	isLoading: boolean
+	error: string | null
+}

@@ -1,13 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { User } from './types'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { UsersState } from './types'
 import { fetchUser } from './thunks'
 
-interface UsersState {
-	users: User[]
-	currentUser: User | null
-	isLoading: boolean
-	error: string | null
-}
 const initialState: UsersState = {
 	users: [],
 	currentUser: null,
@@ -18,7 +13,15 @@ const initialState: UsersState = {
 const usersSlice = createSlice({
 	name: 'users',
 	initialState,
-	reducers: {},
+	reducers: {
+		setCurrentUserFromCache: (state, action: PayloadAction<number>) => {
+			const user = state.users[action.payload]
+			state.currentUser = user ?? null
+			state.isLoading = false
+			state.error = null
+		}
+	},
+
 	extraReducers: (builder) => {
 		builder.addCase(fetchUser.pending, (state) => {
 			state.isLoading = true
@@ -26,6 +29,7 @@ const usersSlice = createSlice({
 		builder.addCase(fetchUser.fulfilled, (state, action) => {
 			state.isLoading = false
 			state.currentUser = action.payload
+			state.users[action.payload.id] = action.payload
 		})
 		builder.addCase(fetchUser.rejected, (state, action) => {
 			state.isLoading = false
@@ -35,3 +39,4 @@ const usersSlice = createSlice({
 })
 
 export const UsersReduser = usersSlice.reducer
+export const { setCurrentUserFromCache } = usersSlice.actions

@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import styles from './Header.module.scss'
@@ -8,8 +8,8 @@ const Header = () => {
 	const navigate = useNavigate()
 	const location = useLocation()
 
-	const canGoBack = useCallback(() => {
-		const state = window.history.state;
+	const canGoBack = useMemo(() => {
+		const state = window.history.state
 		if (state != null && typeof state === 'object' && typeof state.idx === 'number') {
 			return !Number.isNaN(state.idx) && state.idx > 0
 		}

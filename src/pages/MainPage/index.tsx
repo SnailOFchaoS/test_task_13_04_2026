@@ -1,32 +1,72 @@
 import { Header } from '../../components'
 import styles from './MainPage.module.scss'
 import { PostElement } from './PostElement'
-import { useEffect, useState, useCallback } from 'react'
+import { useCallback, useEffect, useState, type ChangeEvent } from 'react'
 
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
+import {
+	applyListFromCache,
+	makePostsListCacheKey,
+} from '../../store/slices/posts'
 import { fetchPosts } from '../../store/slices/posts/thunks'
 
-const limitOptions: number[] = [10, 20, 30, 50, 100];
+const DEFAULT_PAGE = 1
+const DEFAULT_LIMIT = 10
+
+const limitOptions = [10, 20, 30, 50, 100]
+
+const readStoredPage = () => {
+	const raw = sessionStorage.getItem('page')
+	if (raw === null) {
+		return DEFAULT_PAGE
+	}
+	return Math.floor(Number(raw))
+}
+
+const readStoredLimit = () => {
+	const raw = sessionStorage.getItem('limit')
+	if (raw === null) {
+		return DEFAULT_LIMIT
+	}
+	return Number(raw)
+}
 
 const MainPage = () => {
-
-	const [page, setPage] = useState<number>(1)
-	const [limit, setLimit] = useState<number>(10)
+	
+	const [page, setPage] = useState<number>(() => readStoredPage())
+	const [limit, setLimit] = useState<number>(() => readStoredLimit())
 	const [totalPages, setTotalPages] = useState<number>(0)
 
 	const dispatch = useAppDispatch()
 	const { posts, totalCount, isLoading } = useAppSelector((state) => state.posts)
-	
+	const listCacheKey = makePostsListCacheKey(page, limit)
+	const cachedList = useAppSelector((state) => state.posts.postsByQuery[listCacheKey])
+
 	useEffect(() => {
-		const promise = dispatch(fetchPosts({page: page, limit: limit}))
+		if (cachedList) {
+			dispatch(applyListFromCache({ page, limit }))
+			return
+		}
+		const promise = dispatch(fetchPosts({ page, limit }))
 		return () => {
 			promise.abort()
 		}
-	}, [dispatch, page, limit])
+	}, [dispatch, page, limit, cachedList])
 
 	useEffect(() => {
 		setTotalPages(Math.ceil(totalCount / limit))
 	}, [totalCount, limit])
+
+	useEffect(() => {
+		sessionStorage.setItem('page', String(page))
+		sessionStorage.setItem('limit', String(limit))
+	}, [page, limit])
+
+	useEffect(() => {
+		if (totalPages > 0 && page > totalPages) {
+			setPage(totalPages)
+		}
+	}, [totalPages, page])
 
 	const handlePrevPage = useCallback(() => {
 		if (page > 1) {
@@ -39,6 +79,12 @@ const MainPage = () => {
 			setPage(page + 1)
 		}
 	}, [page, totalPages])
+
+	const handleLimitChange = useCallback((e: ChangeEvent<HTMLSelectElement>) => {
+		const next = Number(e.target.value)
+		setLimit(next)
+		setPage(1)
+	}, [])
 
 	return (
 		<div className={styles.container}>
@@ -85,10 +131,7 @@ const MainPage = () => {
 					<select
 						className={styles.limitSelect}
 						value={limit}
-						onChange={(e) => {
-							setLimit(Number(e.target.value))
-							setPage(1)
-						}}
+						onChange={handleLimitChange}
 					>
 						{limitOptions.map((n) => (
 							<option key={n} value={n}>
