@@ -9,6 +9,7 @@ interface Post {
 }
 
 interface PostsState {
+	totalCount: number
 	posts: Post[]
 	currentPost: Post | null
 	isLoading: boolean
@@ -16,6 +17,7 @@ interface PostsState {
 }
 
 const initialState: PostsState = {
+	totalCount: 0,
 	posts: [],
 	currentPost: null,
 	isLoading: false,
@@ -32,9 +34,13 @@ const postsSlice = createSlice({
 		})
 		builder.addCase(fetchPosts.fulfilled, (state, action) => {
 			state.isLoading = false
-			state.posts = action.payload
+			state.posts = action.payload.posts
+			state.totalCount = action.payload.totalCount
 		})
 		builder.addCase(fetchPosts.rejected, (state, action) => {
+			if (action.meta.aborted || action.error.name === 'AbortError') {
+				return
+			}
 			state.isLoading = false
 			state.error = action.error.message || 'Failed to fetch posts'
 		})
