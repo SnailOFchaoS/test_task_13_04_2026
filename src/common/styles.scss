@@ -1,0 +1,10 @@
+@mixin scale($property, $value) {
+	@media (max-width: 1440px) {
+		#{$property}: $value * 0.67;
+	}
+
+	@media (min-width: 1441px) {
+		#{$property}: $value;
+	}
+}
+
